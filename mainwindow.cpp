@@ -1,7 +1,9 @@
 
 #include "mainwindow.h"
+#include "clickablelabel.h"
 
-#include <QGridLayout>
+#include <iostream>
+using namespace std;
 
 #include <QIntValidator>
 #include <QMessageBox>
@@ -12,23 +14,47 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     displayMainMenu();
 }
 
+void MainWindow::labelClicked(){
+    cout << "Hola" << endl;
+}
+
+void MainWindow::drawChessBoard(){
+
+    for (int i = 0; i < 6; ++i) {
+        for (int j = 0; j < 6; ++j) {
+            ClickableLabel *label = new ClickableLabel();
+
+            if((i+j)%2==0)
+                label->setStyleSheet("QLabel { background-color : lightGray }");
+            else
+                label->setStyleSheet("QLabel { background-color : darkGray }");
+
+            connect(label,SIGNAL(clicked()) , this , SLOT(labelClicked()));
+            chessBoardLayout->addWidget(label, i, j);
+
+        }
+    }
+}
+
 void MainWindow::drawGUI() {
 
-    QVBoxLayout *leftLayout = new QVBoxLayout;
+    leftLayout = new QVBoxLayout;
     leftPanel = new QFrame(this);
     leftPanel->setGeometry(QRect(0,0, 212, 768));
     leftPanel->setStyleSheet("background-color: green;");
     leftPanel->setLayout(leftLayout);
     leftPanel->show();
 
-    QGridLayout *chessBoardLayout = new QGridLayout();
+    chessBoardLayout = new QGridLayout();
     chessBoardPanel = new QFrame(this);
     chessBoardPanel->setGeometry(QRect(213, 68, 600, 600));
     chessBoardPanel->setStyleSheet("background-color: blue;");
     chessBoardPanel->setLayout(chessBoardLayout);
     chessBoardPanel->show();
 
-    QVBoxLayout *rightLayout = new QVBoxLayout;
+    drawChessBoard();
+
+    rightLayout = new QVBoxLayout;
     rightPanel = new QFrame(this);
     rightPanel->setGeometry(QRect(814, 0, 212, 768));
     rightPanel->setStyleSheet("background-color: red;");
@@ -84,7 +110,7 @@ void MainWindow::start() {
         quitButton->hide();
 
         drawGUI();
-      //  game = new Game();
+
     }
 }
 
