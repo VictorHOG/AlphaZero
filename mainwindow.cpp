@@ -46,7 +46,8 @@ bool MainWindow::validarItems() {
 void MainWindow::start() {
 
     if (validarItems()) {
-
+        QPalette palette;
+        this->setPalette(palette);
         titleText->hide();
         itemsText->hide();
         itemsLine->hide();
@@ -54,8 +55,6 @@ void MainWindow::start() {
         quitButton->hide();
 
     }
-
-
 }
 
 void MainWindow::displayMainMenu() {
