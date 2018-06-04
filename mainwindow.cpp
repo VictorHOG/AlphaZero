@@ -2,6 +2,8 @@
 #include "mainwindow.h"
 #include "clickablelabel.h"
 
+#include <stdlib.h>
+#include <time.h>
 #include <iostream>
 using namespace std;
 
@@ -15,13 +17,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 }
 
 void MainWindow::labelClicked(){
-    cout << "Hola" << endl;
+    cout << "Hola" << x() << endl;
+
 }
 
 void MainWindow::drawChessBoard(){
 
     for (int i = 0; i < 6; ++i) {
         for (int j = 0; j < 6; ++j) {
+
             ClickableLabel *label = new ClickableLabel();
 
             if((i+j)%2==0)
@@ -36,11 +40,98 @@ void MainWindow::drawChessBoard(){
     }
 }
 
+void MainWindow::inicializarTablero(){
+
+    bool black = true;
+    bool white = true;
+
+    srand(time(NULL));
+    tablero.assign(6, vector<int>(6));
+
+    for (int i = 0; i < 6; ++i) {
+        for (int j = 0; j < 6; ++j) {
+
+            tablero[i][j] = 0;
+        }
+    }
+
+    for (int i = 0; i < cantidadItems+2; ++i) {
+
+        int posX = rand()%6;
+        int posY = rand()%6;
+
+        if (black && tablero[posX][posY] == 0){
+            black= false;
+            tablero[posX][posY] = 2;
+            i++;
+        }
+
+        if (white && tablero[posX][posY] == 0){
+            white= false;
+            tablero[posX][posY] = 3;
+            i++;
+        }
+
+        if (tablero[posX][posY] == 1 || tablero[posX][posY] == 2|| tablero[posX][posY] == 3)
+            i--;
+        else
+            tablero[posX][posY] = 1;
+    }
+
+    for (int i = 0; i < 6; ++i) {
+        for (int j = 0; j < 6; ++j) {
+
+            cout << tablero[i][j] << " ";
+        }
+        cout << endl;
+    }
+
+}
+
+void MainWindow::drawObjects(){
+
+    QPixmap blackHorse(":/images/blackHorse.png");
+    QPixmap whiteHorse(":/images/whiteHorse.png");
+    QPixmap item(":/images/apple.png");
+
+    ClickableLabel *blackHorseLabel = new ClickableLabel();
+    blackHorseLabel->setPixmap(blackHorse);
+    connect(blackHorseLabel,SIGNAL(clicked()) , this , SLOT(labelClicked()));
+
+    ClickableLabel *whiteHorseLabel = new ClickableLabel();
+    whiteHorseLabel->setPixmap(whiteHorse);
+    connect(whiteHorseLabel,SIGNAL(clicked()) , this , SLOT(labelClicked()));
+
+   // chessBoardLayout->addWidget(blackHorseLabel, 0, 0);
+   // chessBoardLayout->addWidget(whiteHorseLabel, 3, 3);
+   // chessBoardLayout->addWidget(itemLabel, 5, 5);
+
+    for (int i = 0; i < 6; ++i) {
+        for (int j = 0; j < 6; ++j) {
+
+            if (tablero[i][j] == 1) {
+                ClickableLabel *itemLabel = new ClickableLabel();
+                itemLabel->setPixmap(item);
+                connect(itemLabel,SIGNAL(clicked()) , this , SLOT(labelClicked()));
+                chessBoardLayout->addWidget(itemLabel, i, j);
+            }else if (tablero[i][j] == 2){
+                chessBoardLayout->addWidget(blackHorseLabel, i, j);
+            } else if (tablero[i][j] == 3){
+                chessBoardLayout->addWidget(whiteHorseLabel, i, j);
+            }
+        }
+    }
+
+}
+
 void MainWindow::drawGUI() {
+
+
 
     leftLayout = new QVBoxLayout;
     leftPanel = new QFrame(this);
     leftPanel->setGeometry(QRect(0,0, 212, 768));
+  //  leftPanel->setPalette(palette);
     leftPanel->setStyleSheet("background-color: green;");
     leftPanel->setLayout(leftLayout);
     leftPanel->show();
@@ -48,11 +139,11 @@ void MainWindow::drawGUI() {
     chessBoardLayout = new QGridLayout();
     chessBoardPanel = new QFrame(this);
     chessBoardPanel->setGeometry(QRect(213, 68, 600, 600));
-    chessBoardPanel->setStyleSheet("background-color: blue;");
+    chessBoardPanel->setStyleSheet("background-image: url(:/images/board.png;");
+  //  chessBoardPanel->setPalette(palette);
+  //  chessBoardPanel->setStyleSheet("background-color: blue;");
     chessBoardPanel->setLayout(chessBoardLayout);
     chessBoardPanel->show();
-
-    drawChessBoard();
 
     rightLayout = new QVBoxLayout;
     rightPanel = new QFrame(this);
@@ -60,6 +151,10 @@ void MainWindow::drawGUI() {
     rightPanel->setStyleSheet("background-color: red;");
     rightPanel->setLayout(rightLayout);
     rightPanel->show();
+
+    drawChessBoard();
+    inicializarTablero();
+    drawObjects();
 
 }
 

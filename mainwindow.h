@@ -10,6 +10,7 @@
 #include <QPushButton>
 
 #include <vector>
+using namespace std;
 
 class MainWindow : public QMainWindow
 {
@@ -21,8 +22,10 @@ public:
     void drawChessBoard();
     void displayMainMenu();
     void drawGUI();
+    void drawObjects();
 
     bool validarItems();
+    void inicializarTablero();
 
 public slots:
     void start();
@@ -43,10 +46,8 @@ private:
     QPushButton *playButton;
     QPushButton *quitButton;
 
-
-
     int cantidadItems;
-  //  vector < vector <int> > tablero;
+    vector < vector <int> > tablero;
 };
 
 #endif // MAINWINDOW_H
