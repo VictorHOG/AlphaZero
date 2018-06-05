@@ -1,6 +1,6 @@
 
 #include "mainwindow.h"
-#include "clickablelabel.h"
+
 
 #include <stdlib.h>
 #include <time.h>
@@ -10,15 +10,22 @@ using namespace std;
 #include <QIntValidator>
 #include <QMessageBox>
 
+#define HORSEBLACK 0
+#define HORSEWHITE 1
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
     setFixedSize(1024,768);
     displayMainMenu();
 }
 
-void MainWindow::labelClicked(){
-    cout << "Hola" << x() << endl;
+void MainWindow::moverItem(int item, int posX, int posY){
+ chessBoardLayout->addWidget(blackHorseLabel, posX, posY);
+}
 
+void MainWindow::labelClicked(){
+    cout << "Hola "  << endl;
+    moverItem(1,0, 5);
 }
 
 void MainWindow::drawChessBoard(){
@@ -47,6 +54,8 @@ void MainWindow::inicializarTablero(){
 
     srand(time(NULL));
     tablero.assign(6, vector<int>(6));
+    positionBlack.assign(2,0);
+    positionWhite.assign(2,0);
 
     for (int i = 0; i < 6; ++i) {
         for (int j = 0; j < 6; ++j) {
@@ -63,12 +72,16 @@ void MainWindow::inicializarTablero(){
         if (black && tablero[posX][posY] == 0){
             black= false;
             tablero[posX][posY] = 2;
+            positionBlack[0] = posX;
+            positionBlack[1] = posY;
             i++;
         }
 
         if (white && tablero[posX][posY] == 0){
             white= false;
             tablero[posX][posY] = 3;
+            positionWhite[0] = posX;
+            positionWhite[1] = posY;
             i++;
         }
 
@@ -94,7 +107,7 @@ void MainWindow::drawObjects(){
     QPixmap whiteHorse(":/images/whiteHorse.png");
     QPixmap item(":/images/apple.png");
 
-    ClickableLabel *blackHorseLabel = new ClickableLabel();
+    blackHorseLabel = new ClickableLabel();
     blackHorseLabel->setPixmap(blackHorse);
     connect(blackHorseLabel,SIGNAL(clicked()) , this , SLOT(labelClicked()));
 
@@ -111,6 +124,8 @@ void MainWindow::drawObjects(){
 
             if (tablero[i][j] == 1) {
                 ClickableLabel *itemLabel = new ClickableLabel();
+                itemLabel->setPosX(i);
+                itemLabel->setposY(j);
                 itemLabel->setPixmap(item);
                 connect(itemLabel,SIGNAL(clicked()) , this , SLOT(labelClicked()));
                 chessBoardLayout->addWidget(itemLabel, i, j);
@@ -125,8 +140,6 @@ void MainWindow::drawObjects(){
 }
 
 void MainWindow::drawGUI() {
-
-
 
     leftLayout = new QVBoxLayout;
     leftPanel = new QFrame(this);

@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "clickablelabel.h"
 
 #include <QGridLayout>
 
@@ -26,6 +27,7 @@ public:
 
     bool validarItems();
     void inicializarTablero();
+    void moverItem(int item, int posX, int posY);
 
 public slots:
     void start();
@@ -40,6 +42,9 @@ private:
     QGridLayout *chessBoardLayout;
     QVBoxLayout *rightLayout;
 
+    ClickableLabel *blackHorseLabel;
+    ClickableLabel *whiteHorseLabel;
+
     QLabel *titleText;
     QLabel *itemsText;
     QLineEdit *itemsLine;
@@ -48,6 +53,8 @@ private:
 
     int cantidadItems;
     vector < vector <int> > tablero;
+    vector<int> positionBlack;
+    vector<int> positionWhite;
 };
 
 #endif // MAINWINDOW_H
