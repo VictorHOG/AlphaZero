@@ -25,10 +25,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    clickablelabel.cpp
+    clickablelabel.cpp \
+    nodo.cpp
 
 HEADERS  += mainwindow.h \
-    clickablelabel.h
+    clickablelabel.h \
+    nodo.h
 
 RESOURCES += \
     images.qrc

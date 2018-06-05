@@ -1,3 +1,8 @@
+/*
+* CARLOS FELIPE MONTOYA - 1535038
+* DIANA MELISSA MILLARES - 1526062
+* VICTOR HUGO ORTEGA - 1532342
+*/
 #include "mainwindow.h"
 #include <QApplication>
 

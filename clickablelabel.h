@@ -1,3 +1,8 @@
+/*
+* CARLOS FELIPE MONTOYA - 1535038
+* DIANA MELISSA MILLARES - 1526062
+* VICTOR HUGO ORTEGA - 1532342
+*/
 #ifndef CLICKABLELABEL_H
 #define CLICKABLELABEL_H
 
@@ -24,7 +29,6 @@ protected:
 private:
     int posX;
     int posY;
-
 };
 
 #endif // CLICKABLELABEL_H
